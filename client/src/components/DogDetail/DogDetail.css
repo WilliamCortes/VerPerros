@@ -1,0 +1,22 @@
+.container_dogdetail{
+    display: flex;
+    justify-content: center;
+}
+ #dogdetail{
+    background: rgb(250, 248, 248);
+    border: solid 1px #845EC2;
+    border-radius: 5px;
+    list-style: none;
+    margin: 2%;
+} */
+/* img{
+    object-fit: cover;
+    height: 500px;
+} */ 
+
+#img_dogdetail{
+    height: 30rem;
+    width: auto;
+    display: none;
+
+}

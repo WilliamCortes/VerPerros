@@ -1,52 +1,61 @@
-const { default: axios } = require('axios');
-const { Temperament } = require('../db');
+const { Temperament, Dog } = require('../db');
 
-async function createTemperaments(){
-    try{
-        temperaments = await axios.get('https://api.thedogapi.com/v1/breeds');
-        temperaments = temperaments.data.map( dog => dog.temperament);
+//Cuando filtro por temperamento
 
-        for(let i =0; i<temperaments.length; i++){
-            if(temperaments[i]){
-              await Temperament.create({ name: temperaments[i] });
-            }
-          }
-        return false;
-    }catch(error){
-        return(error);
+async function getTemperamentDog(name){
+
+    let breeds = await Dog.findAll({
+        include: Temperament
+      });
+    const dogs = [];
+    i =0;
+    while(dogs.length <8 && i < breeds.length){
+        if(breeds[i]?.temperaments[0]?.name.toUpperCase().includes(name)) {
+            dogs.push(breeds[i]);
+        }
+        i++
+
     }
-
+    return  dogs
 }
 
 async function showTemperaments(){
-    const temperamentsDb = await Temperament.findAll();
-                
-    let totalTemperaments = [];
+    try {   
+        const temperamentsDb = await Temperament.findAll();            
+        let totalTemperaments = [];
+        for(let i =0; i < temperamentsDb.length; i++){
+            totalTemperaments = totalTemperaments.concat(temperamentsDb[i].name?.split(','));
+        }
+        totalTemperaments = totalTemperaments.map(name => name.trim());
 
-    for(let i =0; i < temperamentsDb.length; i++){
-        totalTemperaments = totalTemperaments.concat(temperamentsDb[i].name?.split(','));
+        totalTemperaments = totalTemperaments.filter((temp, i) => {
+            return totalTemperaments.indexOf(temp) === i;
+        });
+        return totalTemperaments
+
+    }catch(error){
+        console.log('Error de showTemperaments: ', error);
     }
-    
-    totalTemperaments = totalTemperaments.filter((temp, i) => {
-        return totalTemperaments.indexOf(temp) === i;
-     });
-    return totalTemperaments
 }
 
 async function getAllTemperaments(req, res, next){
     try{
-        let temperaments = await Temperament.findAll()
-        if(!temperaments.length){
-            let create = await createTemperaments();
-            if(create) return next(create)
+        let {name} = req.query;
+        console.log('getAllTemperaments/ controles vlor de name:',name)
+        if(name){
+            let apiBreeds = await getTemperamentDog(name.toUpperCase())
+            if(apiBreeds.length) return res.json(apiBreeds)
+            return res.json('Aún No hay Razas con el temperamento: '+ name)
         }
-        return res.json(await showTemperaments())
+        const temperaments = await showTemperaments()
+        return res.json(temperaments)
+
     } catch(error){
        return next(error)
     }      
 }
 
+
 module.exports = {
     getAllTemperaments,
-    createTemperaments,
 }

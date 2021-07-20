@@ -1,0 +1,50 @@
+img{
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    
+
+}
+.link{
+    display: inline-table;
+    text-decoration: none;
+    background: #845EC2;
+    font-family: sans-serif;
+    color: #fff;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    width: 70%;
+    margin: 5px;
+    height: 2rem;
+    padding-top: 5px;
+    /* display: flex;
+ 
+    flex-direction: column;
+    justify-content: center; */
+
+}
+.link:hover{
+    background:#FF6F91;
+    border-radius: 4px;
+}
+img:hover{
+    object-fit: cover;
+    transform: scale(1,1.01);
+    border: solid 1px #FF6F91;
+    border-radius: 4px;
+}
+button{
+    background: #845EC2;
+    font-family: sans-serif;
+    color: #fff;
+    font-size: 1.1rem;
+    border:none;
+    border-radius: 4px;
+    margin: 4px;
+    height: 2rem;
+}
+button:hover{
+    background:#FF6F91 ;
+    border-radius: 4px;
+
+}

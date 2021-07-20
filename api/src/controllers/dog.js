@@ -1,16 +1,41 @@
-const { Dog } = require('../db');
+const { Dog, Temperament } = require('../db');
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
-const { createTemperaments } = require('./temperament');
 
+//Encargada del post
 
+// async function AddDog(req,res,next){
+//     const id = uuidv4();
+//     const dogBody ={ ...req.body, id };
+//     if(!dogBody) return res.send('Che no viene nada');
+//     try{
+//         if( dogBody.name && dogBody.height && dogBody.weight){
+//             const createDog = await Dog.create(dogBody);
+//             return res.json(createDog);
+//         }
+//         res.send('Che te faltan datos')
+//     }catch (error){
+//         next(error);
+//     }
+// }
 async function AddDog(req,res,next){
     const id = uuidv4();
     const dogBody ={ ...req.body, id };
     if(!dogBody) return res.send('Che no viene nada');
     try{
         if( dogBody.name && dogBody.height && dogBody.weight){
+            
+            if(!dogBody.image) dogBody.image ='https://i.imgur.com/tc5eTf9.jpg'
+            if(!dogBody.years_life) dogBody.years_life = 'No se sabe cuanto puede vivir 📽'
+            if(!dogBody.temperaments) dogBody.temperaments ='A esta raza no le añadieron temperamentos 😰'
+            
+            let temperaments = dogBody.temperaments            
+            let temperamentsResult = await  Temperament.findOrCreate({
+                        where: {  name: temperaments  }
+                    })
+            
             const createDog = await Dog.create(dogBody);
+            await createDog.setTemperaments(temperamentsResult[0])
             return res.json(createDog);
         }
         res.send('Che te faltan datos')
@@ -19,58 +44,18 @@ async function AddDog(req,res,next){
     }
 }
 
-// async function dogBreeds(name){
-//     let breeds = await axios.get('https://api.thedogapi.com/v1/breeds');
-//     breeds = breeds.data
-//     const dogs = []
-//      i =0
-//     while(dogs.length <8 && i < breeds.length){
-//         if(breeds[i].name.includes(name)) {
-//             dogs.push(breeds[i])
-//         }
-//         i++
-
-//     }
-//     return  dogs
-// }
-
-// async function getAllDogs(req, res, next){
-//     try{
-//         let {name} = req.query;
-//         if(name){
-//         let apiBreeds = await dogBreeds(name)
-//         if(apiBreeds.length) return res.json(apiBreeds)
-//         return res.json('No hay Razas con el nombre: '+ name)
-//         }
-//     } catch(error){
-//         next(error)
-//     }
-//     let count=0
-//     const dogApi = axios.get('https://api.thedogapi.com/v1/breeds');
-//     const dogDb = Dog.findAll();
-//     Promise.all([dogApi, dogDb])
-//         .then( response => {
-//             let[dogApiResponse, dogDbResponse] = response;
-//             let totalDogs=dogDbResponse.concat(dogApiResponse.data.splice( count, count+8 ));
-//             count++;
-//             return  res.json( totalDogs);
-//             })
-//         .catch( err => next(err));       
-// }
-
-
-//funcion para ingresar a la db en proceso
-
-
+//Cuando el requets es por query
 
 async function dogBreeds(name){
 
-    let breeds = await Dog.findAll();
-    const dogs = []
-     i =0
+    let breeds = await Dog.findAll({
+        include: Temperament
+      });
+    const dogs = [];
+    i =0;
     while(dogs.length <8 && i < breeds.length){
         if(breeds[i].name.toUpperCase().includes(name)) {
-            dogs.push(breeds[i])
+            dogs.push(breeds[i]);
         }
         i++
 
@@ -79,69 +64,107 @@ async function dogBreeds(name){
 }
 
 
-async function createDogs(){
+
+//Obtiene 8 perros de la db
+
+async function dogsRamdon(){
     try{
-        let dogApi = await axios.get('https://api.thedogapi.com/v1/breeds');
-        dogApi = dogApi.data 
-        for(let i =0; i<dogApi.length; i++){
-            let id_u = uuidv4();
-            let newDog ={
-                name: dogApi[i].name,
-                height: dogApi[i].height.imperial,
-                weight: dogApi[i].weight.imperial,
-                years_life: dogApi[i].life_span,
-                id: id_u,
-                image: dogApi[i].image.url
-            }
-            await Dog.create(newDog);
+        let result = [];
+        let check =[];
+        const getDogs = await Dog.findAll({
+            include: Temperament
+          });
+        for(let i = 0; i<8; i++){
+            let r = Math.floor(Math.random()*(getDogs.length))
+            !check.includes(r) ? result.push(getDogs[r]) && check.push(r) : i--;
         }
-        const dogsDb = await Dog.findAll()
-        return dogsDb.slice(0,8)
-    }
-    catch(error){
-        return error
-    }
+        return result
+    } catch(error){
+        console.log('Error de dogsRamdon: ', error)
+    }    
 }
 
+//cuando me pasan por query= ?todas para ver todas las razas
+
+async function getAllDogsOrder(){
+    try{
+        const result =[]
+        const getDogs = await Dog.findAll({ order: [['name', 'ASC']]});
+        for(let i = 0; i<getDogs.length; i++){
+            if(i === 0){
+                result.push({ 
+                    id: getDogs[i].id, 
+                    name: getDogs[i].name, 
+                    weight: getDogs[i].weight,
+                    image: getDogs[i].image,
+                    next_id: getDogs[i+1].id,
+                    previous_id: false,
+                    })
+                continue
+
+            }  
+            if(i === getDogs.length-1){
+                result.push({ 
+                    id: getDogs[i].id, 
+                    name: getDogs[i].name, 
+                    weight: getDogs[i].weight,
+                    image: getDogs[i].image,
+                    next_id: false,
+                    previous_id: getDogs[i-1].id
+                    })
+                continue
+            }//  ||
+            result.push({ 
+                id: getDogs[i].id, 
+                name: getDogs[i].name, 
+                weight: getDogs[i].weight,
+                image: getDogs[i].image,
+                next_id: getDogs[i+1].id,
+                previous_id: getDogs[i-1].id
+                })
+        }
+        return result
+    } catch(error){
+        console.log('Error de getAllDogsOrder: ', error)
+    }   
+}
+
+//Request de todos las razas
 
 async function getAllDogs(req, res, next){
     try{
-        let {name} = req.query;
+        let {name,  todas} = req.query;
         if(name){
             let apiBreeds = await dogBreeds(name.toUpperCase())
             if(apiBreeds.length) return res.json(apiBreeds)
             return res.json('Aún No hay Razas con el nombre: '+ name)
         }
-        
-        const dogDb = await Dog.findAll()
-        if(dogDb.length < 100){
-            const createDog = await createDogs();
-            const temperaments = await createTemperaments()
-            if(temperaments) return next(temperaments)
-
-            return res.json(createDog);
+        if(todas){
+            let dogsOrder = await getAllDogsOrder()
+            if(dogsOrder) return res.json(dogsOrder)
         } 
-        let count = 8;
-;       const getDogs = await Dog.findAll();
-        return res.json(getDogs.slice(count, count+8))
-
+        
+        let dogRamdon = await dogsRamdon()
+        return res.json(dogRamdon)
         
     } catch(error){
         next(error)
     }
 }
 
+//Optiene un dog por el id por params
+
 async function getDog(req, res, next){
     try{
-        // LLamando a al api
-        // if(req.params.id.toString().length <= 3){
-        // const dogApi = await axios.get(`https://api.thedogapi.com/v1/breeds/${req.params.id}`);
-        // if(!Object.keys(dogApi.data).length) return res.json('Id no válido')
-        // return res.json(dogApi.data)
-        // }
+        
         if(req.params.id.toString().length === 36 ){
-            const dogDb = await Dog.findByPk(req.params.id);//Traer por el id de la d_b findByPk(id)
-            if(dogDb) return res.json(dogDb)
+            const dogDb = await Dog.findByPk(req.params.id,{
+                include: Temperament
+              });
+            if(dogDb){
+                dogDb.temperaments= dogDb.temperaments[0].name;
+                return res.json(dogDb)
+            } 
             return res.send('Id no encontrado')
         }
         res.send('Id no válido')

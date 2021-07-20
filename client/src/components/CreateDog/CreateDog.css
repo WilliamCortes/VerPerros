@@ -1,0 +1,12 @@
+input.danger {
+    border: 2px solid red;
+}
+
+p.danger {
+    color: red;
+    font-size: 10px;
+}
+
+.form_dogs {
+ background: rgb(247, 247, 247);
+}
