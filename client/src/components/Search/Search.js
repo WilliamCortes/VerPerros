@@ -2,7 +2,7 @@ import React, { useState, useEffect }  from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import {  getTemperaments, getDogTemperament, getDogsLoaded, getDogsOrder,removegetDogsLoaded, removedogsTemperaments } from '../../actions';
 import './Search.css';
-
+// import {logo} from '../../../public/images/search-dog.jpg';
 
 const Search = ()=>{
 
@@ -46,29 +46,39 @@ const Search = ()=>{
         <div>
             <h2>Buscador</h2>
             <form className="form-container" >
-                    <label  >Buscar Por Raza de Perro: </label>
-                    <input name='title' placeholder='Todas' value={state.title} onChange={(e) => handleChange(e)} />
-                    <button className={!(state.title?.length) && 'none'} type="button" onClick={(e) => handleSubmit(e)}>BUSCAR</button>
-                    <br></br>
-                    <label > Buscar  Por Temperamento de Perro: </label>
-                    <select name="temperament" value={state.temperament} onChange={(e) => handleChange(e)} >
+              
+                    <label  >Buscar Por Raza: </label>
+                    <input className='input_search' name='title' placeholder='Todas' value={state.title} onChange={(e) => handleChange(e)} />
+                    {/* <button className={!(state.title?.length) && 'none'} type="button" onClick={(e) => handleSubmit(e)}>BUSCAR</button> */}
+                    <button 
+                    className={`${!state.title?.length && "disabled"}`}
+                    type="button" onClick={(e) => handleSubmit(e)}>BUSCAR</button>
+                     
+                    <label > Buscar  Por Temperamento: </label>
+                    <select className='input_search' name="temperament" value={state.temperament} onChange={(e) => handleChange(e)} >
                     {
                         temperamentsDb?.map( (t, key) => (
                             <option key={key} value={t}>{t}</option>  
                         ))
                     }
                     </select>
+                    <button 
+                    className={`${!state.temperament?.length && "disabled"}`}
+                    type="button" name="temperament" onClick={(e) => handleTemperament(e)}>BUSCAR</button>
+             
                     <br></br>
-                    <button className={!state.temperament.length && 'none'} type="button" name="temperament" onClick={(e) => handleTemperament(e)}>BUSCAR</button>
                     <br></br>
+
+   
                     <label >Ordenar Alfabeticamente por Raza: </label>
-                    <input type="button" name='alfabeto' onClick={() => setState({...state, alfabeto : !state.alfabeto })} value={state.alfabeto? 'A -Z' : 'Z - A' } />
+                    <input className='link_order'  type="button" name='alfabeto' onClick={() => setState({...state, alfabeto : !state.alfabeto })} value={state.alfabeto? 'A -Z' : 'Z - A' } />
                     <button type="button" onClick={(e,) => handleOrder(e, 'alfabeto')} >ORDENAR</button>
-                    <br></br>
+                    
                     <label >Ordenar por el Peso: </label>
-                    <input type="button" name='peso' onClick={() => setState({...state, peso : !state.peso })} value={state.peso? 'Min - Max ' : 'Max - Min'} />
+                    <input className='link_order' type="button" name='peso' onClick={() => setState({...state, peso : !state.peso })} value={state.peso? 'Min - Max ' : 'Max - Min'} />
                     <button type="button" onClick={(e) => handleOrder(e, 'peso')}>ORDENAR</button>
                     <br></br>
+           
 
             </form>
         </div>

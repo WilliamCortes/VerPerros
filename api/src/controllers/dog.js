@@ -24,7 +24,12 @@ async function AddDog(req,res,next){
     if(!dogBody) return res.send('Che no viene nada');
     try{
         if( dogBody.name && dogBody.height && dogBody.weight){
-            
+
+            //Validacion para que no se repitan razas con el mismo nombre
+            // const nameExist = await dogBreeds(dogBody.name.toUpperCase())
+            // console.log('controllers/dog/adddog[0]: ', nameExist[0].name)
+            // if(nameExist.length) return res.send('🤦‍♂️ Este nombre ya existe')
+            // if(nameExist.length) return res.json(nameExist)
             if(!dogBody.image) dogBody.image ='https://i.imgur.com/tc5eTf9.jpg'
             if(!dogBody.years_life) dogBody.years_life = 'No se sabe cuanto puede vivir 📽'
             if(!dogBody.temperaments) dogBody.temperaments ='A esta raza no le añadieron temperamentos 😰'
@@ -96,6 +101,7 @@ async function getAllDogsOrder(){
                     id: getDogs[i].id, 
                     name: getDogs[i].name, 
                     weight: getDogs[i].weight,
+                    height:getDogs[i].height, 
                     image: getDogs[i].image,
                     next_id: getDogs[i+1].id,
                     previous_id: false,
@@ -106,7 +112,8 @@ async function getAllDogsOrder(){
             if(i === getDogs.length-1){
                 result.push({ 
                     id: getDogs[i].id, 
-                    name: getDogs[i].name, 
+                    name: getDogs[i].name,
+                    height:getDogs[i].height, 
                     weight: getDogs[i].weight,
                     image: getDogs[i].image,
                     next_id: false,
@@ -117,6 +124,7 @@ async function getAllDogsOrder(){
             result.push({ 
                 id: getDogs[i].id, 
                 name: getDogs[i].name, 
+                height:getDogs[i].height, 
                 weight: getDogs[i].weight,
                 image: getDogs[i].image,
                 next_id: getDogs[i+1].id,

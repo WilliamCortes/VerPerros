@@ -1,4 +1,4 @@
-import {Route} from 'react-router';
+import {Route, Switch} from 'react-router';
 import './App.css';
 import Home from './components/Home/Home';
 import Favorites from './components/Favorites/Favorites';
@@ -13,13 +13,18 @@ function App() {
   return (
     <div className="App">
       <header>
+        <Switch>
+        <Route exact strict  path='/' component={Inicio} />
+        <Route>
         <Route  path='/' component={Nav} />
-        <Route exact path='/' component={Inicio} />
         <Route exact path='/dogs' component={Home} />
         <Route exact path='/favorites' component={Favorites} />
         {/* <Route exact path='/loaded' component={DogsLoaded} /> */}
         <Route exact path='/dogs/:id' component={DogDetail} />
         <Route exact path='/create_dog' component={CreateDog} />
+        </Route>
+
+        </Switch>
       </header>
     </div>
   );

@@ -41,7 +41,6 @@ async function showTemperaments(){
 async function getAllTemperaments(req, res, next){
     try{
         let {name} = req.query;
-        console.log('getAllTemperaments/ controles vlor de name:',name)
         if(name){
             let apiBreeds = await getTemperamentDog(name.toUpperCase())
             if(apiBreeds.length) return res.json(apiBreeds)

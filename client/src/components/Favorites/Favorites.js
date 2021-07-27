@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { removeDogFavorite } from '../../actions';
 import Dog from '../Dog/Dog';
-// import './Favorites.css';
+import './Favorites.css';
 
 
 export class Favorites extends Component {
@@ -11,7 +11,7 @@ export class Favorites extends Component {
     return (
       
       <div >
-      <h2>Razas Favoritas</h2>
+      <h1>Razas Favoritas</h1>
         <ul className= 'container'>
           {
             this.props.dogsFavorites && this.props.dogsFavorites.map(dog =>(

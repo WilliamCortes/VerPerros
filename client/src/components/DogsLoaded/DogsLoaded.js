@@ -20,7 +20,7 @@ const DogsLoaded = () =>{
     return(
         <div>
             <Search/>
-            <h1>Razas Encontradas por Raza</h1>
+            <h1>Razas Encontradas por Nombre </h1>
             <ul className='container'>
             {
             dogsLoaded.map( dog =>(
@@ -36,6 +36,7 @@ const DogsLoaded = () =>{
             }
             </ul>
             <button type="button" onClick={ (e) => handleSubmit(e)}>Ver Otras Razas</button>
+            <br></br>
 
         </div>
     )

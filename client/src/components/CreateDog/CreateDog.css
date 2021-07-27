@@ -1,3 +1,11 @@
+input{
+    border-radius: 1rem;
+    width:  12rem;
+    height: 2rem;
+    text-align: center;
+}
+
+ 
 input.danger {
     border: 2px solid red;
 }
@@ -7,6 +15,29 @@ p.danger {
     font-size: 10px;
 }
 
+.form_dogs label{
+    margin: 10px;
+}
+
 .form_dogs {
- background: rgb(247, 247, 247);
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: flex-end;
+    align-content: space-between;
+
+    width: 36%;
+    margin-left: 28%;
+    margin-right: 32%;
+    background: rgb(247, 247, 247);
+    padding: 3%;
+    border-radius: 1rem;
+}
+.temperaments{
+    position: absolute;
+}
+
+.disabled{
+    background: #FBEAFF;
+    pointer-events: none;
 }

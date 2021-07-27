@@ -8,11 +8,11 @@ function Nav() {
     <header className="navbar">
             
             <nav>
-                <ul className="list">
+                <ul >
                     <li className="list-item">
-                        <NavLink exact to="/dogs" >Home</NavLink>
-                        <NavLink to="/favorites" >Favoritos</NavLink>
-                        <NavLink to="/create_dog" >Agregar Una Raza </NavLink>
+                        <NavLink  exact to="/dogs" >Home</NavLink>
+                        <NavLink  to="/favorites" >Favoritos</NavLink>
+                        <NavLink  to="/create_dog" >Agregar Una Raza </NavLink>
                     </li>
                 </ul>
             </nav>

@@ -1,6 +1,7 @@
 import React, { useState , useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { addDog, clearDogsAdd, getTemperaments } from '../../actions';
+
 import './CreateDog.css';
 
 
@@ -30,18 +31,20 @@ function validate(input) {
     let errors = {};
     if (!input.name) {
       errors.name = 'Nombre es requeredo';
-    } else if (/^\s+$/.test(input.name)) {
+    } else if (!/^\w{2,30}$/.test(input.name)) {
       errors.name = 'Nombre es Invalido';
     }
     if (!input.weight) {
       errors.weight = 'El Peso es requerido';
     // } else if (/^[\d\s]{1,60}$/.test(input.weight)) {
-    } else if (/^\d{2,6}$/.test(input.weight)) {
+    } else if (!/^\d{1,2}\ \-\ \d{1,2}$/.test(input.weight)) {
+    // } else if (!/!^(?!$)(?:[0-9]|100)$gm/g.test(input.weight)) {
       errors.weight = 'El Peso es invalido';
     }
     if (!input.height) {
       errors.height = 'Altura es requerida';
-    } else if (/^-?[0-9]+([.][0-9]+)?$/.test(input.height)) {
+    // } else if (/^-?[0-9]+([.][0-9]+)?$/.test(input.height)) {
+    } else if (!/^\d{1,2}\ \-\ \d{1,2}$/.test(input.height)) {
       errors.height = 'Altura es invalida';
     }
     return errors;
@@ -86,10 +89,10 @@ const CreateDog =  () => {
         dispatch(clearDogsAdd())
         setInput({name:'', weight:'', height:'', years_life:'', temperaments:'',})
     }
-
     return(
         <section>
-            <h3> Aquí podras Agregar una nueva raza de perro</h3>
+          <br></br>
+            <h1> Aquí podras Agregar una nueva raza de perro</h1>
             <br></br>
         {   typeof(dogsAdd) ==="object" ?
             <div>
@@ -100,12 +103,15 @@ const CreateDog =  () => {
             :
             <>
             <form className='form_dogs' onSubmit={ e => handleSubmit(e)}>
+              <section className='section_create'>
                 <label>Nombre  </label>
                 <input className={errors.name && 'danger'} name="name" value={input.name} placeholder='nombre' onChange={handleChange, handleInputChange}/>
                 <br></br>
                 {errors.name && (
                     <p className="danger">{errors.name}</p>
                 )}
+              </section>
+              <section className='section_create'>
                 <br></br>
                 <label>Peso (Min - Max)  </label>
                 <input className={errors.weight && 'danger'} name="weight" value={input.weight} placeholder='Min - Max' onChange={handleChange, handleInputChange}/>
@@ -113,6 +119,8 @@ const CreateDog =  () => {
                 {errors.weight && (
                     <p className="danger">{errors.weight}</p>
                 )}
+              </section>
+              <section className='section_create'>
                 <br></br>
                 <label>Altura (Min - Max)  </label>
                 <input className={errors.height && 'danger'}  name="height" value={input.height}placeholder='Min - Max' onChange={handleChange, handleInputChange}/>
@@ -120,20 +128,24 @@ const CreateDog =  () => {
                 {errors.height && (
                     <p className="danger">{errors.height}</p>
                 )}
+              </section>
+              <section className='section_create'>
                 <br></br>
                 <label>Años de Vida (Min - Max)  </label>
                 <input name="years_life" value={input.years_life} placeholder='Min - Max' onChange={handleChange}/>
                 <br></br>
                 <br></br>
-                <label>Temperamentos  </label>
-                <input name="temperaments" value={input.temperaments} onChange={handleChange}/>
+              </section>
+              <section className='section_create'>
+                <label>Puedes incluir uno o más Temperamentos  </label>
+                <input name="temperaments" multiple value={input.temperaments} onChange={handleChange}/>
                 <br></br>
                 <br></br>
                 <label>
-                    Elije uno o más Temperamentos
-                <input list="temperaments" name="temperaments" onChange={handleChange} />  
+                    Temperamentos
+                <input list="temperaments" multiple  className='temperaments' name="temperaments" onChange={handleChange} />  
                 </label>   
-                <datalist id="temperaments"  >
+                <datalist  id="temperaments" multiple  >
                     {
                         temperamentsDb?.map( (t, key) => (
                             <option key={key} value={t} />  
@@ -141,18 +153,20 @@ const CreateDog =  () => {
 
                     }  
                 </datalist>
-                <br></br>
-                <h5> Aquí Puedes Ver Los Temperamentos</h5>
+                </section>
+                {/* <h5> Aquí Puedes Ver Los Temperamentos</h5>
                 <select name="select" >
                 {
                     temperamentsDb?.map( (t, key) => (
                         <option key={key} value={t}>{t}</option>  
                     ))
                 }
-                </select>
+                </select> */}
                 <br></br>
                 <br></br>
-                <button type="submit">Crear Nueva Raza</button>
+                <button 
+                className={`${(Object.keys(errors).length || !errors) && "disabled"}`}
+                type="submit">Crear Nueva Raza</button>
             </form>
             </>
         }

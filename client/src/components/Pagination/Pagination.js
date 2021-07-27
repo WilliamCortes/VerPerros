@@ -39,7 +39,7 @@ export default function Pagination({response}) {
           className={`${pagination[0] === currentPage && "disabled"}`}
           onClick={handleClick.bind(null, currentPage - 1)}
         >
-          Prev
+          Anterior
         </li>
         {pagination.map(page => (
           <li
@@ -53,7 +53,7 @@ export default function Pagination({response}) {
           className={`${pagination.reverse()[0] === currentPage && "disabled"}`}
           onClick={handleClick.bind(null, currentPage + 1)}
         >
-          Next
+          Siguiente
         </li>
       </ul>
     </div>

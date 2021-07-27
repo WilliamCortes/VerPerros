@@ -61,7 +61,7 @@ const DogsOrder = () =>{
             <h2>{name === 'peso' &&   `Perros Odenados por:  ${name}  ${ state ? 'Min - Max' : 'Max - Min'}`}</h2>
             <Pagination response={response}/>
 
-            <button onClick={()=> dispatch(removeDogsOrder())}>Volver</button>
+            <button onClick={()=> dispatch(removeDogsOrder())}>Ver Razas Aleatorias</button>
         </div>
     )
 }
