@@ -143,7 +143,7 @@ const CreateDog =  () => {
                 <br></br>
                 <label>
                     Temperamentos
-                <input list="temperaments" multiple  className='temperaments' name="temperaments" onChange={handleChange} />  
+                <input list="temperaments" multiple  className='temperaments' autoComplete='off' name="temperaments" onChange={handleChange} />  
                 </label>   
                 <datalist  id="temperaments" multiple  >
                     {

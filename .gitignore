@@ -109,3 +109,5 @@ package-lock.json
 #funtions y respuesta_api
 api/funtions.js
 api/respuesta_api.js
+
+node_modules

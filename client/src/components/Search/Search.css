@@ -1,5 +1,23 @@
+/* Button: rgb(43,149,89);
+Button: #2B9559;
+
+footer:rgb(2,46,26);
+footer:#2B9559;
+
+h1, search: #CB9D57;
+h1, search: rgb(203,157,87);
+
+logo_search:#42A16B;
+logo_search: rgb(203,157,87);
+
+font-size_narvar: #828282;
+font-size_narvar:rgb(130,130,130); */
+
+
+
 .form-container {
     background: rgb(247, 247, 247);
+    height: 20vw;
 }
 
 
