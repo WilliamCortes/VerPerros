@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {useEffect, useState} from 'react';
 // import { useDispatch, useSelector} from 'react-redux';
 // import {getDogsOrder} from './actions';
@@ -9,8 +10,8 @@ export const UseOrderDogs = () =>{
 
     useEffect( () => {
         const getData = async () => {
-            const res = await fetch('http://localhost:3001/dogs/?todas=true')
-            const data = await res.json()
+            const res = await axios.get('/dogs/?todas=true')
+            const data = await res.data
             setData(data)
         }
         getData()

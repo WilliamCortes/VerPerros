@@ -4,7 +4,7 @@ import { SET_DOGS, SET_DOG_DETAIL, REMOVE_DOG_FAVORITE, ADD_DOG_FAVORITE, GET_DO
 
 export function getAllDogs(){
     return( dispatch) => {
-        axios.get(`http://localhost:3001/dogs/`).then(response =>{
+        axios.get(`/dogs/`).then(response =>{
             dispatch( { type: SET_DOGS, payload: response.data})
         })
         .catch(error => {
@@ -15,7 +15,7 @@ export function getAllDogs(){
 }
 export function getDog(id){
     return( dispatch) => {
-        axios.get(`http://localhost:3001/dogs/${id}`).then(response =>{
+        axios.get(`/dogs/${id}`).then(response =>{
             dispatch( { type: SET_DOG_DETAIL, payload: response.data})
         }).catch(error => {
             if(error.response?.status !== 404) alert('Algo salió mal 😅 no hay 🐶')
@@ -25,23 +25,20 @@ export function getDog(id){
 }
 
 export function getDogsLoaded(name) {
-    return function(dispatch) {
-      // Cargando...
-      return fetch(`http://localhost:3001/dogs/?name=${name}`)
-        .then(response => response.json())
-        .then(response => {
-          dispatch({ type: GET_DOGS, payload: response });
+    return (dispatch) => {
+       axios.get(`/dogs/?name=${name}`).then(response => {
+          dispatch({ type: GET_DOGS, payload: response.data });
+        }).catch(error =>{
+            console.log('Error de getDogsLoaded',error)
         });
     };
   }
+
 
 export function removegetDogsLoaded(){
     return ({ type: GET_DOGS, payload: undefined });
 
 }
-// export function clearDog(){
-//     return{ type:GET_DOGS, payload: undefined, }
-// }
 
 export function addDogFavorite(payload){
     return { type: ADD_DOG_FAVORITE, payload };
@@ -52,10 +49,6 @@ export function removeDogFavorite(id){
 }
 
 
-// Action repetida
-// export function clearDogFavorite(){
-//     return { type: GET_DOG_TEMPERAMENTS, payload: undefined }
-// }
 
 export function removedogsTemperaments(){
     return({ type: GET_DOG_TEMPERAMENTS, payload: undefined });
@@ -69,7 +62,7 @@ function imageDogRamdon(){
 export function addDog (payload){
     payload.image =imageDogRamdon(); 
     return( dispatch) => {
-        axios.post(`http://localhost:3001/dogs/`, payload)
+        axios.post(`/dogs/`, payload)
         .then(response =>{
             dispatch( { type: ADD_DOG, payload: response.data})
         }).catch(error => {
@@ -85,39 +78,29 @@ return { type: ADD_DOG, payload: undefined }
 }
 
 
+
 export function getTemperaments () {
-    return function(dispatch) {
-        return fetch(`http://localhost:3001/temperament`)
-        .then(response => response.json())
+    return (dispatch) => {
+        axios.get(`/temperament`)
         .then(response => {
-          dispatch({ type: GET_TEMPERAMENTS, payload: response });
+          dispatch({ type: GET_TEMPERAMENTS, payload: response.data });
         })
         .catch(error => console.log(error))
     }
 }
 
 export function getDogTemperament(name){
-    return function(dispatch) {
-        return fetch(`http://localhost:3001/temperament/?name=${name}`)
-        .then(response => response.json())
+    return (dispatch) => {
+        axios.get(`/temperament/?name=${name}`)
         .then(response => {
-          dispatch({ type: GET_DOG_TEMPERAMENTS, payload: response });
+          dispatch({ type: GET_DOG_TEMPERAMENTS, payload: response.data });
         })
         .catch(error => console.log(error))
     }
 }
 
 export function getDogsOrder ({name, state}){
-    // return function(dispatch) {
-    //     return fetch(`http://localhost:3001/temperament/?name=simple`)
-    //     .then(response => response.json())
-    //     .then(response => {
-    //       dispatch({ type: GET_DOG_ORDER, payload: response });
-    //     })
-    //     .catch(error => console.log(error))
-    // }
     return ({ type: GET_DOG_ORDER, payload: {name, state} });
-
 }
 
 export function removeDogsOrder (){
