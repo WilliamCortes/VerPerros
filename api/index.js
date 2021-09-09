@@ -19,17 +19,19 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
-// require("dotenv").config() // sugerencia de Diego //16-julio-2021 estaba bien y de repente molestó por esta línea
+require("dotenv").config() // sugerencia de Diego //16-julio-2021 estaba bien y de repente molestó por esta línea
 const axios = require('axios');
 const { Dog, Temperament } = require('./src/db.js');
 // Syncing all the models at once.
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
 
 
 // conn.sync({ force: true }).then(() => {
-conn.sync({ force: false }).then(() => {
-  server.listen(PORT, () => {
-    console.log(`%s listening at ${PORT}`); // eslint-disable-line no-console
+  // server.listen(PORT, () => {
+
+conn.sync({ force: true }).then(() => {
+  server.listen(process.env.PORT, () => {
+    console.log(`%s listening at ${process.env.PORT}`); // eslint-disable-line no-console
 
   })
 })
