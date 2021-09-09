@@ -28,10 +28,12 @@ const { Dog, Temperament } = require('./src/db.js');
 
 // conn.sync({ force: true }).then(() => {
   // server.listen(PORT, () => {
+var port_number = server.listen(process.env.PORT || 3001);
+
 
 conn.sync({ force: true }).then(() => {
-  server.listen(process.env.PORT, () => {
-    console.log(`%s listening at ${process.env.PORT}`); // eslint-disable-line no-console
+  server.listen(port_number, () => {
+    console.log(`%s listening at ${port_number}`); // eslint-disable-line no-console
 
   })
 })
