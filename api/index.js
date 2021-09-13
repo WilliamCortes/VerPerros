@@ -32,7 +32,7 @@ const port_number = process.env.PORT || 3001;
 const host = '0.0.0.0';
 
 
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {
   server.listen(port_number, host,() => {
     console.log(`%s listening at ${port_number}`); // eslint-disable-line no-console
 
