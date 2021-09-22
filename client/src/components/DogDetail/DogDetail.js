@@ -40,14 +40,12 @@ function DogDetail(){
                     <h1>{dogDetail.name}</h1>
                     <h4>Temperamentos: <br></br><br></br>{dogDetail.temperaments[0].name}</h4>
                     <div className='dates'>
-                        <div>Altura:   {dogDetail.height}</div>
-                        <div>Peso:   {dogDetail.weight}</div>
-                        <div>Años de vida:  {dogDetail.years_life}</div>
+                        <p>Altura: {dogDetail.height} Peso: {dogDetail.weight}  Años de vida: {dogDetail.years_life}</p>
                     </div>
                     <br></br>
                     {/* <p>{`Altura: ${dogDetail.height}   Peso: ${dogDetail.weight} Años de vida: ${dogDetail.years_life}`}</p> */}
                  
-                    <picture className='image_contain'>
+                    <picture className='dogdetail_contain'>
                         <img className="image_dogdetail" src={dogDetail.image} alt="" />
                     </picture>
                         <br></br>

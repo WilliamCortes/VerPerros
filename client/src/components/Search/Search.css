@@ -22,7 +22,12 @@ font-size_narvar:rgb(130,130,130); */
     justify-content: space-evenly;
 }
 
-
+.form-container > div{
+    background: white;
+    padding: 3px 20px;
+    margin: 5px;
+    border-radius: 20px;
+}
 .link_order{
     width: 6rem;
     /* display: inline-table; */
@@ -45,6 +50,7 @@ font-size_narvar:rgb(130,130,130); */
 .input_search{
     border-radius: 2rem;
     border: solid 1px #845EC2;
+    margin-top: 5px;
 
 }
 

@@ -8,13 +8,23 @@
     overflow: hidden;
 
 }
-
+.dogdetail h4{
+    width: 90%;
+    padding: 6px;
+}
+.dogdetail_contain{
+    height: 45vh;
+}
 .image_dogdetail{
     object-fit: cover;
-
+    height: inherit;
 }
 
 .dates{
     display: flex;
     justify-content: space-evenly;
+}
+.dates p{
+    margin: 2px;
+    width: 80%;
 }

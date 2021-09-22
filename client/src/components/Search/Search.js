@@ -71,7 +71,7 @@ const Search = () => {
                 </div>
                 <br></br>
                 <div>
-                    <label >Ordenar Alfabeticamente por Raza: </label>
+                    <label >Ordenar Alfabeticamente: </label>
                     <input className='link_order' type="button" name='alfabeto' onClick={() => setState({ ...state, alfabeto: !state.alfabeto })} value={state.alfabeto ? 'A -Z' : 'Z - A'} />
                     <button type="button" onClick={(e,) => handleOrder(e, 'alfabeto')} >ORDENAR</button>
                 </div>

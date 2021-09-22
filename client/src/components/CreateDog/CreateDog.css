@@ -25,7 +25,6 @@ p.danger {
     flex-direction: column;
     align-items: flex-end;
     align-content: space-between;
-
     width: 36%;
     margin-left: 28%;
     margin-right: 32%;
@@ -33,11 +32,17 @@ p.danger {
     padding: 3%;
     border-radius: 1rem;
 }
-.temperaments{
-    position: absolute;
-}
 
+.cd_datalist{
+    margin-right: -8px;
+}
 .disabled{
     background: #FBEAFF;
     pointer-events: none;
+}
+@media (max-width: 550px){
+.form_dogs {
+width: 60%;
+margin: 0 20%;
+}
 }
