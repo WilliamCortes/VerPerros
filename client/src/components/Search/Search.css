@@ -17,7 +17,9 @@ font-size_narvar:rgb(130,130,130); */
 
 .form-container {
     background: rgb(247, 247, 247);
-    height: 20vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 

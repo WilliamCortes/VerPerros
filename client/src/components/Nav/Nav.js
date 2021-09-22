@@ -11,7 +11,11 @@ function Nav() {
                 <ul >
                     <li className="list-item">
                         <NavLink  exact to="/dogs" >Home</NavLink>
+                    </li>
+                    <li className="list-item">
                         <NavLink  to="/favorites" >Favoritos</NavLink>
+                    </li>
+                    <li className="list-item">
                         <NavLink  to="/create_dog" >Agregar Una Raza </NavLink>
                     </li>
                 </ul>
