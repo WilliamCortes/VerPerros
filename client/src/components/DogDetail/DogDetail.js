@@ -1,58 +1,59 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { removegetDogsLoaded, getDog, addDogFavorite} from '../../actions';
+import { removegetDogsLoaded, getDog, addDogFavorite } from '../../actions';
 import './DogDetail.css';
 
 
-function DogDetail(){
+function DogDetail() {
     const dispatch = useDispatch();
-    const dogDetail = useSelector( state => state.dogDetail);
-    const dogsFavorites = useSelector( state => state.dogsFavorites)
+    const dogDetail = useSelector(state => state.dogDetail);
+    const dogsFavorites = useSelector(state => state.dogsFavorites)
 
     const { id } = useParams();
-    useEffect( () => {
+    useEffect(() => {
         dispatch(getDog(id))
         return () => {
             dispatch(removegetDogsLoaded())
         }
-    },[dispatch, id])
+    }, [dispatch, id])
 
-    useEffect(()=>{
+    useEffect(() => {
         document.title = `${dogDetail?.name ? dogDetail.name : 'DogDetail'}`
-    },[dogDetail]) 
+    }, [dogDetail])
 
-    const dogFovotite = dogsFavorites?.map(d => d.id === dogDetail?.id ).includes(true)
+    const dogFovotite = dogsFavorites?.map(d => d.id === dogDetail?.id).includes(true)
 
 
-    if(dogDetail === 'Id no válido' ){
-        return(
+    if (dogDetail === 'Id no válido') {
+        return (
             <h1> Raza no encontrada...🐶</h1>
         )
-    }else if(dogDetail === undefined){
-        return(<h1>Cargando...🐕</h1>)
-    }else{
-       
-        return(
-            <div className='container_dogdetail'> 
+    } else if (dogDetail === undefined) {
+        return (<h1>Cargando...🐕</h1>)
+    } else {
+
+        return (
+            <div className='container_dogdetail'>
                 <div className='dogdetail'>
                     Nombre:
                     <h1>{dogDetail.name}</h1>
-                    <h4>Temperamentos: <br></br><br></br>{dogDetail.temperaments[0].name}</h4>
+                    <h4>Temperamentos: </h4>
+                    <p>{dogDetail.temperaments[0].name}</p>
                     <div className='dates'>
-                        <p>Altura: {dogDetail.height} Peso: {dogDetail.weight}  Años de vida: {dogDetail.years_life}</p>
+                        <div>Altura: {dogDetail.height} Peso: {dogDetail.weight}  Años de vida: {dogDetail.years_life}</div>
                     </div>
                     <br></br>
                     {/* <p>{`Altura: ${dogDetail.height}   Peso: ${dogDetail.weight} Años de vida: ${dogDetail.years_life}`}</p> */}
-                 
+
                     <picture className='dogdetail_contain'>
                         <img className="image_dogdetail" src={dogDetail.image} alt="" />
                     </picture>
-                        <br></br>
+                    <br></br>
                     <button
-                    className={`${dogFovotite && "disabled"}`}        
-                    onClick={ () => dispatch(addDogFavorite(
-                        { id: dogDetail.id, name: dogDetail.name, image: dogDetail.image, temperaments: dogDetail.temperaments[0].name, years : dogDetail.years_life}))} >Favorite</button>
+                        className={`${dogFovotite && "disabled"}`}
+                        onClick={() => dispatch(addDogFavorite(
+                            { id: dogDetail.id, name: dogDetail.name, image: dogDetail.image, temperaments: dogDetail.temperaments[0].name, years: dogDetail.years_life }))} >Favorite</button>
                 </div>
             </div>
         )

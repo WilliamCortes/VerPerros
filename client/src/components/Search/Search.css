@@ -20,6 +20,7 @@ font-size_narvar:rgb(130,130,130); */
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    padding: 5px;
 }
 
 .form-container > div{
