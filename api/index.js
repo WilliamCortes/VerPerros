@@ -17,26 +17,19 @@
 //     =====`-.____`.___ \_____/___.-`___.-'=====
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const server = require('./src/app.js');
-const { conn } = require('./src/db.js');
-require("dotenv").config() // sugerencia de Diego //16-julio-2021 estaba bien y de repente molestó por esta línea
-const axios = require('axios');
-const { Dog, Temperament } = require('./src/db.js');
-// Syncing all the models at once.
-// const PORT = process.env.PORT || 3001;
+const server = require("./src/app.js");
+const { conn } = require("./src/db.js");
+require("dotenv").config(); // suggested by Diego //16-july-2021
 
-
-// conn.sync({ force: true }).then(() => {
-  // server.listen(PORT, () => {
-const port_number = process.env.PORT || 3001;
-const host = '0.0.0.0';
-
+const port_number = process.env.PORT || 3000;
+const host = "0.0.0.0";
 
 conn.sync({ force: false }).then(() => {
-  server.listen(port_number, host,() => {
-    console.log(`server listening at ${port_number}`); // eslint-disable-line no-console
+  if (require.main === module) {
+    server.listen(port_number, host, () => {
+      console.log(`server listening at ${port_number}`); // eslint-disable-line no-console
+    });
+  }
+});
 
-  })
-})
-
-
+module.exports = server;
