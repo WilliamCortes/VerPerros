@@ -2,12 +2,14 @@ require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+
 const { DATABASE_URL } = process.env;
 
 let sequelize =
   process.env.NODE_ENV === "production"
     ? new Sequelize(DATABASE_URL,{
-        
+      dialect: 'postgres',
+      dialectModule: require('pg'),
         pool: {
           max: 3,
           min: 1,
@@ -27,7 +29,6 @@ let sequelize =
         DATABASE_URL,
         { logging: false, native: false }
       );
-// Termina sugerencia Diego, para deploy
 
 const basename = path.basename(__filename);
 
@@ -57,6 +58,6 @@ Dog.belongsToMany( Temperament, { through: 'dog_temperament' })
 Temperament.belongsToMany( Dog, { through: 'dog_temperament' })
 
 module.exports = {
-  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
-  conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
+  ...sequelize.models, 
+  conn: sequelize,     
 };
