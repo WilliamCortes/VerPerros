@@ -111,3 +111,5 @@ api/funtions.js
 api/respuesta_api.js
 
 node_modules
+
+api/public

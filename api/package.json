@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "mocha -w ./tests/**/*.spec.js"
+    "test": "mocha -w ./tests/**/*.spec.js",
+    "clean": "rimraf public",
+    "copy-files": "copyfiles index.js ./src/**/*.js public/",
+    "build": "npm run clean && npm run copy-files"
   },
   "author": "William Cortés",
   "license": "ISC",
@@ -27,8 +30,10 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "copyfiles": "^2.4.1",
     "mocha": "^8.4.0",
     "nodemon": "^2.0.12",
+    "rimraf": "^6.0.1",
     "supertest": "^6.0.1",
     "supertest-session": "^4.1.0"
   }
