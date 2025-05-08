@@ -1,49 +1,35 @@
 const { Dog, Temperament } = require('../db');
-const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
-//Encargada del post
 
-// async function AddDog(req,res,next){
-//     const id = uuidv4();
-//     const dogBody ={ ...req.body, id };
-//     if(!dogBody) return res.send('Che no viene nada');
-//     try{
-//         if( dogBody.name && dogBody.height && dogBody.weight){
-//             const createDog = await Dog.create(dogBody);
-//             return res.json(createDog);
-//         }
-//         res.send('Che te faltan datos')
-//     }catch (error){
-//         next(error);
-//     }
-// }
+
 async function AddDog(req,res,next){
     const id = uuidv4();
+    if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).json({ error: 'Request body is empty' });
+    }
     const dogBody ={ ...req.body, id };
-    if(!dogBody) return res.send('Che no viene nada');
     try{
         if( dogBody.name && dogBody.height && dogBody.weight){
 
             //Validacion para que no se repitan razas con el mismo nombre
             // const nameExist = await dogBreeds(dogBody.name.toUpperCase())
             // console.log('controllers/dog/adddog[0]: ', nameExist[0].name)
-            // if(nameExist.length) return res.send('🤦‍♂️ Este nombre ya existe')
-            // if(nameExist.length) return res.json(nameExist)
-            if(!dogBody.image) dogBody.image ='https://i.imgur.com/tc5eTf9.jpg'
-            if(!dogBody.years_life) dogBody.years_life = 'No se sabe cuanto puede vivir 📽'
-            if(!dogBody.temperaments) dogBody.temperaments ='A esta raza no le añadieron temperamentos 😰'
+            // if(nameExist.length) return res.status(409).json({ error: 'Este nombre ya existe', details: nameExist }) // Example of conflict
+            if(!dogBody.image) dogBody.image ='https://i.imgur.com/tc5eTf9.jpg';
+            if(!dogBody.years_life) dogBody.years_life = 'No se sabe cuanto puede vivir 📽';
+            if(!dogBody.temperaments) dogBody.temperaments ='A esta raza no le añadieron temperamentos 😰';
             
-            let temperaments = dogBody.temperaments            
-            let temperamentsResult = await  Temperament.findOrCreate({
-                        where: {  name: temperaments  }
-                    })
+            let temperamentsInput = dogBody.temperaments; 
+            let [temperamentInstance] = await Temperament.findOrCreate({ 
+                        where: {  name: temperamentsInput  }
+                    });
             
             const createDog = await Dog.create(dogBody);
-            await createDog.setTemperaments(temperamentsResult[0])
-            return res.json(createDog);
+            await createDog.setTemperaments(temperamentInstance);
+            return res.status(201).json(createDog);
         }
-        res.send('Che te faltan datos')
+        res.status(400).json({ error: 'Faltan datos obligatorios: nombre, altura y peso.' });
     }catch (error){
         next(error);
     }
@@ -57,7 +43,7 @@ async function dogBreeds(name){
         include: Temperament
       });
     const dogs = [];
-    i =0;
+    let i =0;
     while(dogs.length <8 && i < breeds.length){
         if(breeds[i].name.toUpperCase().includes(name)) {
             dogs.push(breeds[i]);
@@ -71,26 +57,34 @@ async function dogBreeds(name){
 
 
 //Obtiene 8 perros de la db
-
-async function dogsRamdon(){
+async function dogsRandom(){ 
     try{
         let result = [];
-        let check =[];
+        let check = new Set();
         const getDogs = await Dog.findAll({
             include: Temperament
           });
-        for(let i = 0; i<8; i++){
-            let r = Math.floor(Math.random()*(getDogs.length))
-            !check.includes(r) ? result.push(getDogs[r]) && check.push(r) : i--;
+
+        if (getDogs.length === 0) {
+            return []; 
         }
-        return result
+
+        const numDogsToSelect = Math.min(8, getDogs.length); 
+        while(result.length < numDogsToSelect){
+            let r = Math.floor(Math.random() * getDogs.length);
+            if (!check.has(r)) {
+                result.push(getDogs[r]);
+                check.add(r);
+            }
+        }
+        return result;
     } catch(error){
-        console.log('Error de dogsRamdon: ', error)
+        console.error('Error in dogsRandom: ', error); 
+        throw error;
     }    
 }
 
 //cuando me pasan por query= ?todas para ver todas las razas
-
 async function getAllDogsOrder(){
     try{
         const result =[]
@@ -152,7 +146,7 @@ async function getAllDogs(req, res, next){
             if(dogsOrder) return res.json(dogsOrder)
         } 
         
-        let dogRamdon = await dogsRamdon()
+        let dogRamdon = await dogsRandom()
         return res.json(dogRamdon)
         
     } catch(error){

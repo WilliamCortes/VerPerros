@@ -31,7 +31,7 @@ let sequelize =
         ssl: true,
       })
     : new Sequelize(
-        `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
+        DATABASE_URL,
         { logging: false, native: false }
       );
 // Termina sugerencia Diego, para deploy

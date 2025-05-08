@@ -34,7 +34,7 @@ const host = '0.0.0.0';
 
 conn.sync({ force: false }).then(() => {
   server.listen(port_number, host,() => {
-    console.log(`%s listening at ${port_number}`); // eslint-disable-line no-console
+    console.log(`server listening at ${port_number}`); // eslint-disable-line no-console
 
   })
 })
